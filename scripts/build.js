@@ -1,14 +1,38 @@
 const fs = require("fs-extra");
+const jsonlines = require("jsonlines");
 const path = require("path");
 const { marked } = require("marked");
 
 // Define the paths
 const markdownDir = path.join(__dirname, "..", "pages");
 const htmlDir = path.join(__dirname, "..", "site");
-const mergeOnTemplate = (page) => {
+const mergeOnTemplate = (page, fileName) => {
 	const templatePath = path.join(__dirname, "template.html");
-	const template = fs.readFileSync(templatePath, "utf8");
+	const pageInfo = getPageInfo(fileName);
+	let template = fs.readFileSync(templatePath, "utf8");
+	template = template.replace("<!-- title -->", pageInfo.title);
 	return template.replace("<!-- body -->", page);
+};
+
+const getPageInfo = (filename) => {
+	console.log(`Fetching page info for ${filename}`);
+	if (filename === "index") {
+		return {
+			title: "Karamouche's blog",
+		};
+	}
+	const parser = jsonlines.parse();
+	const pages = fs.readFileSync(path.join(__dirname, "pages.jsonl"), "utf8");
+	const pageInfo = {};
+	parser.on("data", (data) => {
+		if (data.filename === filename) {
+			pageInfo.title = data.title;
+			pageInfo.publishing_date = data.publishing_date;
+		}
+	});
+	parser.write(pages);
+	parser.end();
+	return pageInfo;
 };
 
 // Read all markdown files from the markdown directory
@@ -22,9 +46,9 @@ fs.readdir(markdownDir, (err, files) => {
 			// Read the markdown file
 			fs.readFile(path.join(markdownDir, file), "utf8", (err, data) => {
 				if (err) throw err;
-
+				const fileName = file.split(".")[0];
 				// Convert the markdown to HTML
-				const html = mergeOnTemplate(marked(data));
+				const html = mergeOnTemplate(marked(data), fileName);
 
 				// Write the HTML to a new file in the HTML directory
 				fs.writeFile(
@@ -54,13 +78,44 @@ fs.copy(
 	}
 );
 
-// copy pages.json to site directory
-// Disable when building /blog pages and put published date on pages
-fs.copyFile(
-	path.join(__dirname, "pages.json"),
-	path.join(__dirname, "..", "site", "pages.json"),
-	(err) => {
-		if (err) throw err;
-		console.log("pages.json copied to site directory");
-	}
-);
+// build blog.html following the template
+// blog.html will index all blog posts listed in pages.jsonl
+const makeBlog = () => {
+	console.log("Creating blog.html");
+	const parser = jsonlines.parse();
+	const pages = fs.readFileSync(path.join(__dirname, "pages.jsonl"), "utf8");
+	const blog = [];
+	parser.on("data", (data) => {
+		if (data.filename !== "index") {
+			const date = new Date(data.publishing_date);
+			// date formatted like "Aug 31, 2021"
+			data.publishing_date = date.toLocaleString("en-US", {
+				month: "short",
+				day: "numeric",
+				year: "numeric",
+			});
+			blog.push([
+				date,
+				`<div><a href="/${data.filename}.html">${data.title}</a><p> - ${data.publishing_date}</p></div>`,
+			]);
+		}
+	});
+	parser.write(pages);
+	parser.end();
+	const templatePath = path.join(__dirname, "template.html");
+	let template = fs.readFileSync(templatePath, "utf8");
+	// sort items in blog by date
+	blog.sort((a, b) => b[0] - a[0]);
+	template = template.replace("<!-- title -->", "Blog");
+	return template.replace(
+		"<!-- body -->",
+		`<h1>Karamouche's blogposts</h1><div class="blogposts">${blog
+			.map((item) => item[1])
+			.join("")}</div>`
+	);
+};
+
+fs.writeFile(path.join(htmlDir, `blog.html`), makeBlog(), (err) => {
+	if (err) throw err;
+	console.log(`blog.html created`);
+});

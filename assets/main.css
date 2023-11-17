@@ -65,6 +65,19 @@ body {
 	font-style: underline;
 }
 
+.blogposts div {
+	margin-top: 35px;
+}
+
+.blogposts a {
+	font-size: 24px;
+}
+
+.blogposts p {
+	color: lightslategray;
+	font-style: italic;
+}
+
 h1,
 h2,
 h3,
@@ -185,6 +198,7 @@ th {
 		line-height: 1.5;
 		max-width: 100%; /* Adjust this value based on your preference */
 		margin: none; /* Center the content */
+		box-shadow: 0 0 0 0;
 	}
 
 	.navbar {
