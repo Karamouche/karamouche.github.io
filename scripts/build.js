@@ -6,12 +6,23 @@ const { marked } = require("marked");
 // Define the paths
 const markdownDir = path.join(__dirname, "..", "pages");
 const htmlDir = path.join(__dirname, "..", "site");
-const mergeOnTemplate = (page, fileName) => {
+const mergeOnTemplate = (page, filename) => {
 	const templatePath = path.join(__dirname, "template.html");
-	const pageInfo = getPageInfo(fileName);
+	const pageInfo = getPageInfo(filename);
 	let template = fs.readFileSync(templatePath, "utf8");
 	template = template.replace("<!-- title -->", pageInfo.title);
-	return template.replace("<!-- body -->", page);
+	template = template.replace("<!-- body -->", page);
+	// add at line two the date
+	const date = getPageDateFormated(filename);
+	if (filename !== "index") {
+		template = template.replace(
+			"</h1>",
+			`</h1><p class="date">- ${date} • Karamouche</p>`
+		);
+	} else {
+		template = template.replace("</h1>", `</h1><p class="date"></p>`);
+	}
+	return template;
 };
 
 const getPageInfo = (filename) => {
@@ -33,6 +44,17 @@ const getPageInfo = (filename) => {
 	parser.write(pages);
 	parser.end();
 	return pageInfo;
+};
+
+const getPageDateFormated = (filename) => {
+	const pageInfo = getPageInfo(filename);
+	const date = new Date(pageInfo.publishing_date);
+	// date formatted like "Aug 31, 2021"
+	return date.toLocaleString("en-US", {
+		month: "short",
+		day: "numeric",
+		year: "numeric",
+	});
 };
 
 // Read all markdown files from the markdown directory
@@ -87,16 +109,10 @@ const makeBlog = () => {
 	const blog = [];
 	parser.on("data", (data) => {
 		if (data.filename !== "index") {
-			const date = new Date(data.publishing_date);
-			// date formatted like "Aug 31, 2021"
-			data.publishing_date = date.toLocaleString("en-US", {
-				month: "short",
-				day: "numeric",
-				year: "numeric",
-			});
+			const date = getPageDateFormated(data.filename);
 			blog.push([
 				date,
-				`<div><a href="/${data.filename}.html">${data.title}</a><p> - ${data.publishing_date}</p></div>`,
+				`<div><a href="/${data.filename}.html">${data.title}</a><p> - ${date}</p></div>`,
 			]);
 		}
 	});
