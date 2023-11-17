@@ -3,7 +3,7 @@ name: Building karamouche.github.io
 on:
   push:
     branches:
-      - master
+      - main
 
 permissions:
   contents: read
