@@ -10,6 +10,8 @@ const mergeOnTemplate = (page, filename) => {
 	const templatePath = path.join(__dirname, "template.html");
 	const pageInfo = getPageInfo(filename);
 	let template = fs.readFileSync(templatePath, "utf8");
+	// add assets/images/ before src in all img tags
+	page = page.replace(/src="/g, 'src="assets/images/');
 	template = template.replace("<!-- title -->", pageInfo.title);
 	template = template.replace("<!-- body -->", page);
 	// add at line two the date
@@ -17,7 +19,7 @@ const mergeOnTemplate = (page, filename) => {
 	if (filename !== "index") {
 		template = template.replace(
 			"</h1>",
-			`</h1><p class="date">- ${date} • Karamouche</p>`
+			`</h1><p class="date">${date} • Karamouche</p>`
 		);
 	} else {
 		template = template.replace("</h1>", `</h1><p class="date"></p>`);
