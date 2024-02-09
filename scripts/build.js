@@ -2,6 +2,7 @@ const fs = require("fs-extra");
 const jsonlines = require("jsonlines");
 const path = require("path");
 const { marked } = require("marked");
+const katex = require("katex");
 
 // Define the paths
 const markdownDir = path.join(__dirname, "..", "pages");
@@ -12,6 +13,7 @@ const mergeOnTemplate = (page, filename) => {
 	let template = fs.readFileSync(templatePath, "utf8");
 	// add assets/images/ before src in all img tags
 	page = page.replace(/src="/g, 'src="assets/images/');
+	page = replaceWithLatex(page);
 	template = template.replace("<!-- title -->", pageInfo.title);
 	template = template.replace("<!-- body -->", page);
 	// add at line two the date
@@ -57,6 +59,35 @@ const getPageDateFormated = (filename) => {
 		day: "numeric",
 		year: "numeric",
 	});
+};
+
+const replaceWithLatex = (page) => {
+	const latexRegex = /\$\$([^$]+)\$\$/g;
+	const matches = page.match(latexRegex);
+	if (matches) {
+		matches.forEach((match) => {
+			const latex = match.slice(2, -2);
+			const html = katex.renderToString(latex, {
+				throwOnError: false,
+				output: "mathml",
+			});
+			page = page.replace(match, "<center>" + html + "</center>");
+			page = page.replace(latex, "");
+		});
+	}
+	const latexRegexInline = /\$([^$]+)\$/g;
+	const matchesInline = page.match(latexRegexInline);
+	if (matchesInline) {
+		matchesInline.forEach((match) => {
+			const latex = match.slice(1, -1);
+			const html = katex.renderToString(latex, {
+				throwOnError: false,
+				output: "mathml",
+			});
+			page = page.replace(match, html);
+		});
+	}
+	return page;
 };
 
 // Read all markdown files from the markdown directory
