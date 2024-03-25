@@ -2,7 +2,7 @@
 
 For our last year of engineering school, our master thesis project focused on a computer vision field called _Real-time object detection_. Following this field, our project explores the realm of augmented reality, aiming to transform static drawings on paper into interactive and dynamic experiences. By leveraging innovative technologies such as deep learning and real-time object detection with YOLO, we choose to build our model using Google Creative Lab's QuickDraw dataset to train a robust drawings detection model.
 
-![mockup.jpg](All%20about%20PenCity%20b1b9873ac6de4328862f5d0a8cc18144/mockup.jpg)
+![mockup.jpg](all_about_pencity/mockup.jpg)
 
 The final goal is to create an augmented reality system that detects drawings in real-time and enhances the environment with corresponding 3D models. This initiative seeks to turn a simple sketch into a lively and interactive cityscape when viewed through a smartphone, blending artificial intelligence, object detection, and augmented reality.
 
@@ -12,11 +12,11 @@ This blog post will detail our approach to building such an AI, including the te
 
 As we where looking for a project idea in the field of augmented reality, we found the dataset _Quickdraw_ released by Google in 2018. This dataset is a collection of 50 million drawings tagged with one of the 345 different categories. It has been built with the data gathered on [quickdraw.withgoogle.com](https://quickdraw.withgoogle.com/), where the user had to draw a thing in less than 20 seconds.
 
-![Untitled](All%20about%20PenCity%20b1b9873ac6de4328862f5d0a8cc18144/Untitled.png)
+![Untitled](all_about_pencity/Untitled.png)
 
 Finding this dataset, we got the idea of the project, with the augmented reality application describe above. And because our project was to build a city, we needed to filter drawings to keep only relevent categories for our use case (eg., house, bridge, hospital, …). We ended up with keeping 17 categories related to this use case.
 
-![Untitled](All%20about%20PenCity%20b1b9873ac6de4328862f5d0a8cc18144/Untitled%201.png)
+![Untitled](all_about_pencity/Untitled%201.png)
 
 ## Which AI should we use ?
 
@@ -29,7 +29,7 @@ Now that we have the model, let the training step begin. For now, the model is n
 
 YOLO is an object detection model, which means that its purpose is to locate and identify objects on a selected pictures. As said earlier, we want it to identify drawings on a picture, and label those drawings with the good label.
 
-![Illustration of how the AI should work](All%20about%20PenCity%20b1b9873ac6de4328862f5d0a8cc18144/Untitled%202.png)
+![Illustration of how the AI should work](all_about_pencity/Untitled%202.png)
 
 To do that, we need training data that corresponds to real use drawings. Our strategy was then to build a dataset, creating canvas with multiple drawings past on it.
 
@@ -43,7 +43,7 @@ $$
 
 Where $C_n$ is the class ID associated with the object, and $B_x, B_x, B_w, B_h$ are respectivly the coordinates x and y of the object, and its width and height. All of thoses vectors are written in a text file, one by line, where the file has the same name as the image file. Following that process, the YOLO training script will be capable of reading our data, and learn how to detect drawings on a paper sheet.
 
-![Example of a training image.](All%20about%20PenCity%20b1b9873ac6de4328862f5d0a8cc18144/Untitled%203.png)
+![Example of a training image.](all_about_pencity/Untitled%203.png)
 
 ## Create the app with Unity
 
@@ -51,7 +51,7 @@ Creating an app that brings drawings to life using augmented reality is like tur
 
 To make this happen, we're using a powerful tool called Unity, a game-developping platform used for 2D/3D and in our case, AR. With Unity, we used what we call AR Foundation,the Unity’s framework dedicated to AR builds.
 
-![Untitled](All%20about%20PenCity%20b1b9873ac6de4328862f5d0a8cc18144/Untitled%204.png)
+![Untitled](all_about_pencity/Untitled%204.png)
 
 ## Challenges encountered during the build
 
@@ -61,7 +61,7 @@ Additionally, ensuring that these 3D models remain anchored to the paper despite
 
 Moreover, enhancing AR Foundation's plane recognition capabilities to consistently identify the paper as a valid surface for overlaying 3D models was crucial. Instead of using Unity’s built-in Plane detector ( AR Plane Manager) , we wanted our own touch , so we created a script to detect and adapt a surface layer to the paper, ensuring a good 3D model placement.
 
-![Untitled](All%20about%20PenCity%20b1b9873ac6de4328862f5d0a8cc18144/Untitled%205.png)
+![Untitled](all_about_pencity/Untitled%205.png)
 
 ## Integrating Yolo with Unity
 
