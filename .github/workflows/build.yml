@@ -57,6 +57,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
+      # Add a step that prints all files in the repository
+      - name: List all files in the repository
+        run: ls -R
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
