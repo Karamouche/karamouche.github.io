@@ -65,11 +65,11 @@ Moreover, enhancing AR Foundation's plane recognition capabilities to consistent
 
 ## Integrating Yolo with Unity
 
-Integrating the YOLO model into Unity was the most difficult part of our project and we are still working on it. We first transformed the model into an ONNX file, a universal format that Unity's Barracuda inference engine can understand, allowing us to bring real-time object detection into the Unity environment.
+Integrating the YOLO model into Unity was initially the most challenging aspect of our project, but we're thrilled to announce that it's now successfully completed! We began by transforming the model into an ONNX file, a universal format compatible with Unity's Barracuda inference engine, enabling real-time object detection within the Unity environment.
 
-This integration will facilitate the dynamic processing of camera feeds directly within Unity, where the YOLO model, now compatible through Barracuda, will accurately detect drawings and in the meantime trigger the instantiation of 3D models in precise alignment with the detected objects on paper, thus bridging the gap between deep learning algorithms and augmented reality.
+This integration has revolutionized our project, allowing for dynamic processing of camera feeds directly within Unity. With YOLO now seamlessly integrated through Barracuda, it accurately detects drawings and instantiates 3D models in precise alignment with detected objects on paper, seamlessly merging deep learning algorithms with augmented reality.
 
-Althought the integration isn’t completely finished because we still need to make the 3D models actually “spawn” when our algorithm detect them , we are confident to succeed in our integration and are already planning to add interactive elements once models are positioned, such as object movement and animations, to truly enrich the user experience with interactive and dynamic augmented reality scenarios.
+While the integration process is complete, we're continuously refining our system to enhance user interaction. Our next steps involve fine-tuning the spawning mechanism for 3D models once detected by our algorithm. Additionally, we're excited to implement interactive elements such as object movement and animations, further enriching the user experience with dynamic augmented reality scenarios.
 
 ## Why you’ll want to download our app !
 
