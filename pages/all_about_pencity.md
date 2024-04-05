@@ -71,6 +71,6 @@ This integration has revolutionized our project, allowing for dynamic processing
 
 While the integration process is complete, we're continuously refining our system to enhance user interaction. Our next steps involve fine-tuning the spawning mechanism for 3D models once detected by our algorithm. Additionally, we're excited to implement interactive elements such as object movement and animations, further enriching the user experience with dynamic augmented reality scenarios.
 
-## Why you’ll want to download our app !
+## Why you need to download our app ?
 
 This isn't just an app; it's a doorway to blending your imagination with reality. It's a chance to see your art leap off the page and interact with it in a way that's never been possible before. Whether you're a parent looking for a fun activity with your kids, a teacher seeking a creative educational tool, or just someone who loves to draw and daydream, our app promises to bring a little extra magic into your life !
