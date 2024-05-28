@@ -145,7 +145,7 @@ const makeBlog = () => {
 			const date = getPageDateFormated(data.filename);
 			blog.push([
 				date,
-				`<div><a href="/${data.filename}.html">${data.title}</a><p> - ${date}</p></div>`,
+				`<div><a href="/${data.filename}.html">${data.title}</a><p>  - ${date} (${data.lang})</p></div>`,
 			]);
 		}
 	});
